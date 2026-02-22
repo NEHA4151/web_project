@@ -1,35 +1,69 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
 
-const sequelize = require('./config/database');
-const authRoutes = require('./routes/auth');
+const sequelize = require("./config/database");
+const authRoutes = require("./routes/auth");
 
 const app = express();
 
-// Middleware
-app.use(cors());
-app.use(express.json()); // Parse JSON bodies
+/* ===========================
+   CORS CONFIGURATION
+   =========================== */
 
-// Routes
-app.use('/api/auth', authRoutes);
+app.use(
+  cors({
+    origin: [
+      "https://web-project-one-rosy.vercel.app", // your Vercel frontend
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
-// Connect to PostgreSQL and sync database
-sequelize.authenticate()
-    .then(() => {
-        console.log('✅ Connected to PostgreSQL successfully!');
-        // Sync models to the database (creates tables if they don't exist)
-        // Note: Use { alter: true } during development to update tables without dropping them
-        return sequelize.sync({ alter: true });
-    })
-    .then(() => {
-        console.log('✅ Database models synchronized successfully!');
-    })
-    .catch((err) => {
-        console.error('❌ Failed to connect to PostgreSQL:', err);
-    });
+// Important for preflight requests
+app.options("*", cors());
+
+/* ===========================
+   MIDDLEWARE
+   =========================== */
+
+app.use(express.json());
+
+/* ===========================
+   ROUTES
+   =========================== */
+
+app.use("/api/auth", authRoutes);
+
+// Optional health check route (very useful)
+app.get("/", (req, res) => {
+  res.send("Backend API is running 🚀");
+});
+
+/* ===========================
+   DATABASE CONNECTION
+   =========================== */
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("✅ Connected to PostgreSQL successfully!");
+    return sequelize.sync({ alter: true });
+  })
+  .then(() => {
+    console.log("✅ Database models synchronized successfully!");
+  })
+  .catch((err) => {
+    console.error("❌ Failed to connect to PostgreSQL:", err);
+  });
+
+/* ===========================
+   START SERVER
+   =========================== */
 
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
