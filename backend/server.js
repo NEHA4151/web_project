@@ -8,20 +8,17 @@ const authRoutes = require("./routes/auth");
 const app = express();
 
 /* ===========================
-   CORS CONFIGURATION
+   CORS CONFIGURATION (OPEN FOR DEBUG)
    =========================== */
 
 app.use(
   cors({
-    origin: [
-      "https://web-project-one-rosy.vercel.app", // your Vercel frontend
-    ],
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
   })
 );
 
-// Important for preflight requests
+// Handle preflight requests
 app.options("*", cors());
 
 /* ===========================
@@ -36,7 +33,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 
-// Optional health check route (very useful)
+// Health check route
 app.get("/", (req, res) => {
   res.send("Backend API is running 🚀");
 });
