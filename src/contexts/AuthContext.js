@@ -30,31 +30,31 @@ export const AuthProvider = ({ children }) => {
     return db ? JSON.parse(db) : [];
   };
 
-  const login = (phoneNumber, password) => {
+  const login = (email, password) => {
     const users = getUsersDb();
-    const existingUser = users.find(u => u.phone === phoneNumber && u.password === password);
+    const existingUser = users.find(u => u.email === email && u.password === password);
 
     if (existingUser) {
       // Don't store password in active session state
-      const sessionUser = { name: existingUser.name, phone: existingUser.phone };
+      const sessionUser = { name: existingUser.name, email: existingUser.email };
       setUser(sessionUser);
       localStorage.setItem('finance-tracker-user', JSON.stringify(sessionUser));
       return { success: true };
     }
 
-    return { success: false, message: 'Invalid phone number or password' };
+    return { success: false, message: 'Invalid email or password' };
   };
 
-  const signup = (name, phoneNumber, password) => {
+  const signup = (name, email, password) => {
     const users = getUsersDb();
 
     // Check if user already exists
-    if (users.some(u => u.phone === phoneNumber)) {
-      return { success: false, message: 'Account with this phone number already exists' };
+    if (users.some(u => u.email === email)) {
+      return { success: false, message: 'Account with this email already exists' };
     }
 
     // Add new user to "database"
-    const newUser = { name, phone: phoneNumber, password };
+    const newUser = { name, email: email, password };
     users.push(newUser);
     localStorage.setItem('finance-tracker-users-db', JSON.stringify(users));
 

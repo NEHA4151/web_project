@@ -6,7 +6,7 @@ import './Auth.css';
 const Auth = () => {
     const [isLogin, setIsLogin] = useState(true);
     const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMsg, setErrorMsg] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
@@ -20,18 +20,18 @@ const Auth = () => {
         setSuccessMsg('');
 
         if (isLogin) {
-            const result = login(phone, password);
+            const result = login(email, password);
             if (result.success) {
                 navigate('/');
             } else {
                 setErrorMsg(result.message);
             }
         } else {
-            const result = signup(name, phone, password);
+            const result = signup(name, email, password);
             if (result.success) {
                 setSuccessMsg(result.message);
                 setIsLogin(true); // Switch to login view
-                // We keep phone and password filled to make it easier to log in, but clear name
+                // We keep email and password filled to make it easier to log in, but clear name
                 setName('');
                 setPassword(''); // Actually, better to clear password for security
             } else {
@@ -69,13 +69,13 @@ const Auth = () => {
                     )}
 
                     <div className="form-group">
-                        <label>Phone Number</label>
+                        <label>Email ID</label>
                         <input
-                            type="tel"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             required
-                            placeholder="Enter your phone number"
+                            placeholder="Enter your email ID"
                         />
                     </div>
 

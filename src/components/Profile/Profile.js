@@ -27,8 +27,8 @@ const Profile = () => {
                         <span className="detail-value">{user.name}</span>
                     </div>
                     <div className="detail-item">
-                        <span className="detail-label">Phone Number</span>
-                        <span className="detail-value">{user.phone}</span>
+                        <span className="detail-label">Email ID</span>
+                        <span className="detail-value">{user.email}</span>
                     </div>
                 </div>
 
